@@ -9,6 +9,8 @@ from langchain_ollama import ChatOllama
 import getpass
 import os
 from langgraph.checkpoint.memory import MemorySaver
+import json
+import re
 
 
 llm = ChatOllama(model="gemma3:1b")
@@ -76,6 +78,7 @@ def react_agent(state:State):
          Format your response using these headers for clarity.
          Don't include any other text in your response.
          Don't add any follow up questions.
+         respond only with valid JSON using the fields: SUMMARY, TECHNICAL ANALYSIS, PRIORITY LEVEL, SUGGESTED APPROACH, ADDITIONAL NOTES. Do not include Markdown formatting or backticks.
          """
       },
       {
@@ -102,6 +105,7 @@ def java_agent(state:State):
          Format your response using these headers for clarity.
          Don't include any other text in your response.
          Don't add any follow up questions.
+         respond only with valid JSON using the fields: SUMMARY, TECHNICAL ANALYSIS, PRIORITY LEVEL, SUGGESTED APPROACH, ADDITIONAL NOTES. Do not include Markdown formatting or backticks.
          """
       },
       {
@@ -128,6 +132,7 @@ def python_agent(state:State):
          Format your response using these headers for clarity.
          Don't include any other text in your response.
          Don't add any follow up questions.
+         respond only with valid JSON using the fields: SUMMARY, TECHNICAL ANALYSIS, PRIORITY LEVEL, SUGGESTED APPROACH, ADDITIONAL NOTES. Do not include Markdown formatting or backticks.
          """
       },
       {
@@ -154,6 +159,7 @@ def sql_agent(state:State):
          Format your response using these headers for clarity.
          Don't include any other text in your response.
          Don't add any follow up questions.
+         respond only with valid JSON using the fields: SUMMARY, TECHNICAL ANALYSIS, PRIORITY LEVEL, SUGGESTED APPROACH, ADDITIONAL NOTES. Do not include Markdown formatting or backticks.
          """
       },
       {
@@ -164,7 +170,7 @@ def sql_agent(state:State):
    response = llm.invoke(messages)
    return {"messages": [{"role": "assistant", "content": response.content}]}
 
-def run_chatbot():
+def run_chatbot(user_input):
    graph_builder = StateGraph(State)
    graph_builder.add_node("classifier",classify_message)
    graph_builder.add_node("router",router)
@@ -193,7 +199,7 @@ def run_chatbot():
 
    graph = graph_builder.compile()
 
-   user_input = input("Message: ").strip()
+   user_input = user_input.strip()
    if not user_input:
       print("Error: Please provide a message")
       return
@@ -206,8 +212,21 @@ def run_chatbot():
    }
    
    result = graph.invoke(initial_state)
-   print(f'The ticket is sent to the {result["message_type"]} team.')
-   print(f'Response: {result["messages"][-1].content}')
+   # print(f'The ticket is sent to the {result["message_type"]} team.')
+   # print(f'Response: {result["messages"][-1].content}')
+
+   content = result["messages"][-1].content
+   cleaned = re.search(r"\{.*\}", content, re.DOTALL)
+
+   if cleaned:
+      team_dict = {"team": result["message_type"]}
+      result_format = team_dict | (json.loads(cleaned.group(0)))
+   else:
+      raise ValueError("No valid JSON found in LLM response.")
+
+   print(result_format)
+   return result_format
+
 
 if __name__ == "__main__":
    run_chatbot()
