@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from typing import List
 from ticket_agent import run_chatbot
 import uvicorn
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
@@ -13,14 +14,14 @@ class Message(BaseModel):
     message: str
 
 
-class Ticket(BaseModel):
-    team: str
-    message: str
-    summary: str
-    technical_analysis: str
-    priority_level: str
-    suggested_approach:str
-    additional_notes: str
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # or use ["http://localhost:3000"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 
 @app.post("/ticket/add-ticket")

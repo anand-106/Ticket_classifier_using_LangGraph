@@ -219,7 +219,7 @@ def run_chatbot(user_input):
    cleaned = re.search(r"\{.*\}", content, re.DOTALL)
 
    if cleaned:
-      team_dict = {"team": result["message_type"]}
+      team_dict = {"message":user_input,"team": result["message_type"]}
       result_format = team_dict | (json.loads(cleaned.group(0)))
    else:
       raise ValueError("No valid JSON found in LLM response.")
