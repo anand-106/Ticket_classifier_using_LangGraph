@@ -1,13 +1,28 @@
-import React, { useState } from "react";
-import { TicketList, getTickets } from "./Tickets.js";
+import React, { useState, useEffect } from "react";
+import { TicketList } from "./Tickets.js";
+import { fetchTickets } from "./api.js";
 
 function App() {
+  const [tickets, setTickets] = useState([]);
+
+  const getTickets = async () => {
+    try {
+      const data = await fetchTickets();
+      setTickets(data["tickets"]);
+    } catch (e) {
+      console.log("Failed to load Tickets ", e);
+    }
+  };
+
+  useEffect(() => {
+    getTickets();
+  }, []);
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
       <div className="w-full max-w-5xl mx-auto px-4">
         <Header />
-        <TicketInput />
-        <TicketList />
+        <TicketInput getTickets={getTickets} />
+        <TicketList tickets={tickets} />
       </div>
     </div>
   );
@@ -26,7 +41,7 @@ function Header() {
   );
 }
 
-function TicketInput() {
+function TicketInput({ getTickets }) {
   const [inputValue, setInputValue] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -61,7 +76,7 @@ function TicketInput() {
         console.log("Success:", data);
         alert("Ticket submitted successfully!");
         setInputValue("");
-        // getTickets(); // Clear form after successful submission
+        getTickets(); // Clear form after successful submission
       } else {
         throw new Error("Failed to submit ticket");
       }

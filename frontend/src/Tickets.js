@@ -1,21 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { fetchTickets } from "./api";
-
-export function TicketList() {
-  const [tickets, setTickets] = useState([]);
-
-  useEffect(() => {
-    const getTickets = async () => {
-      try {
-        const data = await fetchTickets();
-        setTickets(data["tickets"]);
-      } catch (e) {
-        console.log("Failed to load Tickets ", e);
-      }
-    };
-    getTickets();
-  }, []);
-
+export function TicketList({ tickets }) {
   return (
     <div>
       <div className="text-center mt-4 ">

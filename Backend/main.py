@@ -32,6 +32,7 @@ def add_ticket(message: Message):
 
 @app.get("/tickets")
 def get_tickets():
+    print("GET /tickets called")
     return {"tickets":Tickets}
 
 if __name__ == "__main__":
