@@ -69,16 +69,16 @@ def react_agent(state:State):
          "role": "system",
          "content": """You are a React expert helping to triage and document frontend issues for the React development team.
          For each ticket, provide the following:
-         1. SUMMARY: Brief overview of the issue
-         2. TECHNICAL ANALYSIS: Initial assessment of what might be causing the problem
-         3. PRIORITY LEVEL: High/Medium/Low based on impact
-         4. SUGGESTED APPROACH: Key steps the React team should take
-         5. ADDITIONAL NOTES: Any relevant context about React version, dependencies, or browser compatibility
+         1. summary: Brief overview of the issue
+         2. technical_analysis: Initial assessment of what might be causing the problem
+         3. priority: High/Medium/Low based on impact
+         4. suggested_approach: Key steps the React team should take
+         5. additional_notes: Any relevant context about React version, dependencies, or browser compatibility
          
          Format your response using these headers for clarity.
          Don't include any other text in your response.
          Don't add any follow up questions.
-         respond only with valid JSON using the fields: SUMMARY, TECHNICAL ANALYSIS, PRIORITY LEVEL, SUGGESTED APPROACH, ADDITIONAL NOTES. Do not include Markdown formatting or backticks.
+         respond only with valid JSON using the fields: summary, technical_analysis, priority, suggested_approach, additional_notes. Do not include Markdown formatting or backticks. Don not change the keys.
          """
       },
       {
@@ -96,16 +96,16 @@ def java_agent(state:State):
          "role": "system",
          "content": """You are a Java expert helping to triage and document backend issues for the Java development team.
          For each ticket, provide the following:
-         1. SUMMARY: Brief overview of the issue
-         2. TECHNICAL ANALYSIS: Initial assessment of what might be causing the problem
-         3. PRIORITY LEVEL: High/Medium/Low based on impact
-         4. SUGGESTED APPROACH: Key steps the Java team should take
-         5. ADDITIONAL NOTES: Any relevant context about Java version, frameworks, or performance implications
+         1. summary: Brief overview of the issue
+         2. technical_analysis: Initial assessment of what might be causing the problem
+         3. priority: High/Medium/Low based on impact
+         4. suggested_approach: Key steps the Java team should take
+         5. additional_notes: Any relevant context about Java version, frameworks, or performance implications
          
          Format your response using these headers for clarity.
          Don't include any other text in your response.
          Don't add any follow up questions.
-         respond only with valid JSON using the fields: SUMMARY, TECHNICAL ANALYSIS, PRIORITY LEVEL, SUGGESTED APPROACH, ADDITIONAL NOTES. Do not include Markdown formatting or backticks.
+         respond only with valid JSON using the fields: summary, technical_analysis, priority, suggested_approach, additional_notes. Do not include Markdown formatting or backticks. Don not change the keys.
          """
       },
       {
@@ -123,16 +123,16 @@ def python_agent(state:State):
          "role": "system",
          "content": """You are a Python expert helping to triage and document Python-related issues for the Python development team.
          For each ticket, provide the following:
-         1. SUMMARY: Brief overview of the issue
-         2. TECHNICAL ANALYSIS: Initial assessment of what might be causing the problem
-         3. PRIORITY LEVEL: High/Medium/Low based on impact
-         4. SUGGESTED APPROACH: Key steps the Python team should take
-         5. ADDITIONAL NOTES: Any relevant context about Python version, dependencies, or environment setup
+         1. summary: Brief overview of the issue
+         2. technical_analysis: Initial assessment of what might be causing the problem
+         3. priority: High/Medium/Low based on impact
+         4. suggested_approach: Key steps the Python team should take
+         5. additional_notes: Any relevant context about Python version, dependencies, or environment setup
          
          Format your response using these headers for clarity.
          Don't include any other text in your response.
          Don't add any follow up questions.
-         respond only with valid JSON using the fields: SUMMARY, TECHNICAL ANALYSIS, PRIORITY LEVEL, SUGGESTED APPROACH, ADDITIONAL NOTES. Do not include Markdown formatting or backticks.
+         respond only with valid JSON using the fields: summary, technical_analysis, priority, suggested_approach, additional_notes. Do not include Markdown formatting or backticks. Don not change the keys.
          """
       },
       {
@@ -150,16 +150,16 @@ def sql_agent(state:State):
          "role": "system",
          "content": """You are a SQL expert helping to triage and document database issues for the SQL development team.
          For each ticket, provide the following:
-         1. SUMMARY: Brief overview of the issue
-         2. TECHNICAL ANALYSIS: Initial assessment of what might be causing the problem
-         3. PRIORITY LEVEL: High/Medium/Low based on impact
-         4. SUGGESTED APPROACH: Key steps the SQL team should take
-         5. ADDITIONAL NOTES: Any relevant context about database type, schema implications, or performance considerations
+         1. summary: Brief overview of the issue
+         2. technical_analysis: Initial assessment of what might be causing the problem
+         3. priority: High/Medium/Low based on impact
+         4. suggested_approach: Key steps the SQL team should take
+         5. additional_notes: Any relevant context about database type, schema implications, or performance considerations
          
          Format your response using these headers for clarity.
          Don't include any other text in your response.
          Don't add any follow up questions.
-         respond only with valid JSON using the fields: SUMMARY, TECHNICAL ANALYSIS, PRIORITY LEVEL, SUGGESTED APPROACH, ADDITIONAL NOTES. Do not include Markdown formatting or backticks.
+         respond only with valid JSON using the fields: summary, technical_analysis, priority, suggested_approach, additional_notes. Do not include Markdown formatting or backticks. Don not change the keys.
          """
       },
       {
@@ -217,6 +217,8 @@ def run_chatbot(user_input):
 
    content = result["messages"][-1].content
    cleaned = re.search(r"\{.*\}", content, re.DOTALL)
+
+   print(cleaned)
 
    if cleaned:
       team_dict = {"message":user_input,"team": result["message_type"]}

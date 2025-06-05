@@ -8,15 +8,15 @@ function App() {
   const getTickets = async () => {
     try {
       const data = await fetchTickets();
-      setTickets(data["tickets"]);
+      setTickets(data);
     } catch (e) {
       console.log("Failed to load Tickets ", e);
     }
   };
 
-  useEffect(() => {
-    getTickets();
-  }, []);
+  // useEffect(() => {
+  //   getTickets();
+  // }, []);
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
       <div className="w-full max-w-5xl mx-auto px-4">
@@ -61,7 +61,7 @@ function TicketInput({ getTickets }) {
 
     try {
       // Simulate API call - replace with your actual endpoint
-      const response = await fetch("http://localhost:8001/ticket/add-ticket", {
+      const response = await fetch("http://localhost:8001/add-ticket", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -76,7 +76,7 @@ function TicketInput({ getTickets }) {
         console.log("Success:", data);
         alert("Ticket submitted successfully!");
         setInputValue("");
-        getTickets(); // Clear form after successful submission
+        // getTickets(); // Clear form after successful submission
       } else {
         throw new Error("Failed to submit ticket");
       }
