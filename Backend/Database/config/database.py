@@ -1,9 +1,10 @@
-
+from dotenv import load_dotenv
+import os
 from pymongo.mongo_client import MongoClient
 
+load_dotenv()
 
-
-client = MongoClient("mongodb+srv://admin:mongo123@cluster0.sw5zopi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+client = MongoClient(os.getenv("MONGO_URI"))
 
 db = client.tickets
 

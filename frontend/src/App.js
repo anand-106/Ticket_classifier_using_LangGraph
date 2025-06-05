@@ -14,9 +14,9 @@ function App() {
     }
   };
 
-  // useEffect(() => {
-  //   getTickets();
-  // }, []);
+  useEffect(() => {
+    getTickets();
+  }, []);
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
       <div className="w-full max-w-5xl mx-auto px-4">
@@ -76,7 +76,7 @@ function TicketInput({ getTickets }) {
         console.log("Success:", data);
         alert("Ticket submitted successfully!");
         setInputValue("");
-        // getTickets(); // Clear form after successful submission
+        getTickets(); // Clear form after successful submission
       } else {
         throw new Error("Failed to submit ticket");
       }

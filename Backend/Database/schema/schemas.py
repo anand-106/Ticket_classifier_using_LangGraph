@@ -1,9 +1,11 @@
 from datetime import datetime
 import pytz
+from Database.config.database import collection_name
 
 def individual_serial(ticket)->dict:
     return {
         "id": str(ticket["_id"]),
+        "ticket_no": ticket["ticket_no"],
         "message": ticket["message"],
         "team": ticket["team"],
         "summary": ticket["summary"],
@@ -25,7 +27,7 @@ def make_ticket(ticket):
     formatted_now = now.strftime('%Y-%m-%d %H:%M:%S')
 
     return {
-        "ticket_no": 1000,
+        "ticket_no": 1001+collection_name.count_documents({}),
         "message": ticket["message"],
         "team": ticket["team"],
         "summary": ticket["summary"],

@@ -21,8 +21,9 @@ app.add_middleware(
     allow_origins=["*"],  # or use ["http://localhost:3000"]
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],
+    allow_headers=["*"]
 )
+
 
 
 
