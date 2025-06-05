@@ -34,3 +34,5 @@ Backend/.venv
 /frontend/yarn-debug.log*
 /frontend/yarn-error.log*
 
+.env
+
