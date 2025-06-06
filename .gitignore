@@ -38,3 +38,5 @@ Backend/.env
 .env
 
 Backend/.env
+
+frontend/src/Auth/auth_config.json
