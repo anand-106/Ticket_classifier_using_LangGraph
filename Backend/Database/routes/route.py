@@ -1,10 +1,11 @@
 from fastapi import APIRouter
-from Database.models.model import Ticket,Message
-from Database.schema.schemas import list_serial,make_ticket
+from Database.models.model import Ticket,Message,CloseTicket
+from Database.schema.schemas import list_serial,make_ticket,individual_serial
 from Database.config.database import collection_name
 from ticket_agent import run_chatbot
 from bson import ObjectId
 from pydantic import ValidationError
+from fastapi import HTTPException
 
 router = APIRouter()
 
@@ -27,4 +28,19 @@ async def set_ticket(message: Message):
     except ValidationError as e:
         print(e)
 
+#get single ticket
+@router.get("/ticket/{ticketNo}")
+async def get_ticket(ticketNo:int):
+    ticket = collection_name.find_one({"ticket_no":ticketNo})
+    if ticket:
+        return individual_serial(ticket)
+    else:
+        raise HTTPException(status_code=404, detail="Ticket not found")
+    
+
+#close Ticket
+@router.patch("/ticket/{ticketNo}")
+async def close_ticket(ticketNo: int ,data: CloseTicket):
+    collection_name.update_one({"ticket_no":ticketNo},{"$set":{"isOpen":data.isOpen}})
+    return {"message":"Ticket closed successfully"}
     

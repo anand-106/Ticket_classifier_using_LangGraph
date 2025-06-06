@@ -1,8 +1,21 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { TicketList } from "./Tickets.js";
 import { fetchTickets } from "./api.js";
+import { TicketDetails } from "./ticketDetails.js";
 
 function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/ticket/:ticketNo" element={<TicketDetails />} />{" "}
+      </Routes>
+    </Router>
+  );
+}
+
+function Home() {
   const [tickets, setTickets] = useState([]);
 
   const getTickets = async () => {

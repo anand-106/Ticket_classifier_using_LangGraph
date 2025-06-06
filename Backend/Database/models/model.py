@@ -15,3 +15,6 @@ class Ticket(BaseModel):
 
 class Message(BaseModel):
     message: str
+
+class CloseTicket(BaseModel):
+    isOpen: bool
