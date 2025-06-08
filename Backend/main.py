@@ -5,6 +5,8 @@ from ticket_agent import run_chatbot
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from Database.routes.route import router
+from Auth.auth import check_role
+from fastapi import FastAPI, Depends
 
 app = FastAPI()
 
@@ -24,6 +26,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"]
 )
+
+@router.get("/admin")
+def admin_only_route(user=Depends(check_role("admin"))):
+    return {"message": "Welcome Admin!", "user": user}
 
 
 

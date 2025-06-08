@@ -3,12 +3,23 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { TicketList } from "./Tickets.js";
 import { fetchTickets } from "./api.js";
 import { TicketDetails } from "./ticketDetails.js";
+import { AuthWrapper } from "./Auth/authWrapper.js";
+import { LoginPage } from "./Auth/Login.js";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={
+            <AuthWrapper>
+              <Home />
+            </AuthWrapper>
+          }
+        />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/ticket/:ticketNo" element={<TicketDetails />} />{" "}
       </Routes>
     </Router>
@@ -42,11 +53,41 @@ function Home() {
 }
 
 function Header() {
+  const namespace = "https://myapp.local";
+  const { user } = useAuth0();
+  const LogoutButton = () => {
+    const { logout } = useAuth0();
+
+    return (
+      <button
+        onClick={() =>
+          logout({ logoutParams: { returnTo: window.location.origin } })
+        }
+      >
+        <h2 className="text-white">Log Out</h2>
+      </button>
+    );
+  };
+  const roles = user?.[`${namespace}/roles`] || [];
   return (
     <div className="text-center mb-8">
-      <h1 className="text-3xl font-bold text-white mb-2">
-        Ticket Submission Portal
-      </h1>
+      <div className="">
+        <h1 className="text-3xl font-bold text-white mb-2">
+          Ticket Submission Portal
+        </h1>
+        <div className="flex justify-end">
+          <LogoutButton />
+        </div>
+      </div>
+      {roles.includes("user") && (
+        <p className="text-gray-400 text-sm">Hello User....</p>
+      )}
+      {roles.includes("admin") && (
+        <p className="text-gray-400 text-sm">Hello Admin....</p>
+      )}
+      {roles.includes("developer") && (
+        <p className="text-gray-400 text-sm">Hello Admin....</p>
+      )}
       <p className="text-gray-400 text-sm">
         Submit your support requests below
       </p>

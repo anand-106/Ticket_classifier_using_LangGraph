@@ -1,6 +1,4 @@
-from pydantic import BaseModel,Field
-
-
+from pydantic import BaseModel
 class Ticket(BaseModel):
     ticket_no: int
     message: str
