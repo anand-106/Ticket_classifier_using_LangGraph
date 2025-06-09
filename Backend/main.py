@@ -21,11 +21,12 @@ app.include_router(router)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # or use ["http://localhost:3000"]
+    allow_origins=["http://localhost:3000"],  # be explicit
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
+
 
 @router.get("/protected")
 def admin_only_route(user=Depends(token_verify)):

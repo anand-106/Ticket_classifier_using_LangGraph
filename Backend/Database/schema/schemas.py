@@ -14,7 +14,8 @@ def individual_serial(ticket)->dict:
         "suggested_approach": ticket["suggested_approach"],
         "additional_notes": ticket["additional_notes"],
         "time": ticket["time"],
-        "isOpen": ticket["isOpen"]
+        "isOpen": ticket["isOpen"],
+        "user_id":ticket["user_id"]
     }
 
 def list_serial(tickets):
@@ -36,5 +37,6 @@ def make_ticket(ticket):
         "suggested_approach": ticket["suggested_approach"],
         "additional_notes": ticket["additional_notes"],
         "time": str(formatted_now),
-        "isOpen": True
+        "isOpen": True,
+        "user_id":ticket["user_id"]
     }

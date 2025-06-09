@@ -35,7 +35,7 @@ function Home() {
   const getTickets = useCallback(async () => {
     try {
       console.log("trying to get tickets");
-      const data = await callAPI("http://localhost:8001/tickets", "get");
+      const data = await callAPI("http://localhost:8001/my-tickets", "get");
       setTickets(data);
     } catch (e) {
       console.log("Failed to load Tickets ", e);
@@ -104,6 +104,7 @@ function Header() {
 function TicketInput({ getTickets }) {
   const [inputValue, setInputValue] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { getAccessTokenSilently } = useAuth0();
 
   const handleChange = (event) => {
     setInputValue(event.target.value);
@@ -121,10 +122,13 @@ function TicketInput({ getTickets }) {
 
     try {
       // Simulate API call - replace with your actual endpoint
+
+      const token = await getAccessTokenSilently();
       const response = await fetch("http://localhost:8001/add-ticket", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           message: inputValue,

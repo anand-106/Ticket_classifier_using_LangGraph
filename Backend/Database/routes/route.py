@@ -19,11 +19,12 @@ async def get_tickets(payload=Depends(check_role(['admin','Developers']))):
 
 #post
 @router.post("/add-ticket")
-async def set_ticket(message: Message):
+async def set_ticket(message: Message,payload=Depends(check_role(['user','admin','Developers']))):
     print("setting ticket")
     try:
-        ticket = run_chatbot(message.message)
+        ticket = run_chatbot(message.message,user_id=payload["sub"])
         final_ticket=make_ticket(ticket)
+        print(payload)
         collection_name.insert_one(Ticket(**final_ticket).model_dump(mode="alias"))
         return final_ticket
     except ValidationError as e:
@@ -31,7 +32,7 @@ async def set_ticket(message: Message):
 
 #get single ticket
 @router.get("/ticket/{ticketNo}")
-async def get_ticket(ticketNo:int):
+async def get_ticket(ticketNo:int,payload=Depends(check_role(['user','admin','Developers']))):
     ticket = collection_name.find_one({"ticket_no":ticketNo})
     if ticket:
         return individual_serial(ticket)
@@ -40,8 +41,17 @@ async def get_ticket(ticketNo:int):
     
 
 #close Ticket
-@router.patch("/ticket/{ticketNo}")
-async def close_ticket(ticketNo: int ,data: CloseTicket):
+@router.patch("/ticket/{ticketNo}",)
+async def close_ticket(ticketNo: int ,data: CloseTicket,payload=Depends(check_role(['admin','Developers']))):
     collection_name.update_one({"ticket_no":ticketNo},{"$set":{"isOpen":data.isOpen}})
     return {"message":"Ticket closed successfully"}
+
+
+#get tickets by user id
+@router.get("/my-tickets")
+async def get_my_tickets(payload=Depends(check_role(['user', 'admin', 'Developers']))):
+    print(payload)
+    user_id = payload["sub"]
+    tickets = list_serial(collection_name.find({"user_id": user_id}))
+    return tickets
     

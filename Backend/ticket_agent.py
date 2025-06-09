@@ -170,7 +170,7 @@ def sql_agent(state:State):
    response = llm.invoke(messages)
    return {"messages": [{"role": "assistant", "content": response.content}]}
 
-def run_chatbot(user_input):
+def run_chatbot(user_input,user_id):
    graph_builder = StateGraph(State)
    graph_builder.add_node("classifier",classify_message)
    graph_builder.add_node("router",router)
@@ -221,7 +221,7 @@ def run_chatbot(user_input):
    print(cleaned)
 
    if cleaned:
-      team_dict = {"message":user_input,"team": result["message_type"]}
+      team_dict = {"message":user_input,"team": result["message_type"],"user_id": user_id }
       result_format = team_dict | (json.loads(cleaned.group(0)))
    else:
       raise ValueError("No valid JSON found in LLM response.")

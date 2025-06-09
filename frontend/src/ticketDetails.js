@@ -2,18 +2,26 @@ import { data, Link, useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { RequireRole } from "./Auth/roleRequirer";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export function TicketDetails() {
   const { ticketNo } = useParams();
   const [Ticket, setTicket] = useState(null);
   const [isClosing, setisClosing] = useState(false);
   const [isOpen, setisOpen] = useState(null);
+  const { getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
     const fetchTicket = async () => {
       try {
+        const token = await getAccessTokenSilently();
         const response = await axios.get(
-          `http://127.0.0.1:8001/ticket/${ticketNo}`
+          `http://127.0.0.1:8001/ticket/${ticketNo}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         setTicket(response.data);
         setisOpen(response.data.isOpen);

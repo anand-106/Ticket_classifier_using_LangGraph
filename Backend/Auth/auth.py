@@ -17,9 +17,8 @@ def token_verify(credentials: HTTPAuthorizationCredentials = Depends(auth_scheme
     jwks_url = f"https://{AUTH0_DOMAIN}/.well-known/jwks.json"
     jwks = requests.get(jwks_url).json()
 
-    print(token)  # Print the raw JWT
     unverified_token = jwt.get_unverified_header(token)
-    print(unverified_token)  # This should include 'kid'
+    print(unverified_token)  
 
     rsa_key = next(
         (

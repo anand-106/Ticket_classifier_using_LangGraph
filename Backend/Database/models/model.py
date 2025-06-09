@@ -1,4 +1,5 @@
-from pydantic import BaseModel
+from pydantic import BaseModel,Field
+from typing import Optional
 class Ticket(BaseModel):
     ticket_no: int
     message: str
@@ -10,6 +11,7 @@ class Ticket(BaseModel):
     additional_notes: str
     time: str
     isOpen: bool
+    user_id: Optional[str] = Field(default=None)
 
 class Message(BaseModel):
     message: str
