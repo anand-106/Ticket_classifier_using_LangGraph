@@ -52,11 +52,11 @@ def token_verify(credentials: HTTPAuthorizationCredentials = Depends(auth_scheme
     except Exception as e:
         raise HTTPException(status_code=401, detail="token validation failed")
     
-def check_role(role: str):
+def check_role(allowed_roles: list[str]):
     def role_checker(payload=Depends(token_verify)):
         roles = payload.get(f"{NAMESPACE}/roles", [])
-        if role not in roles:
-            raise HTTPException(status_code=403, detail="Not authorized")
+        if not any(role in roles for role in allowed_roles):
+            raise HTTPException(status_code=403, detail="Role Not authorized")
         return payload
     return role_checker
 

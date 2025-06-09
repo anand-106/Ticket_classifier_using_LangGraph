@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { TicketList } from "./Tickets.js";
 import { fetchTickets } from "./api.js";
@@ -7,6 +7,7 @@ import { AuthWrapper } from "./Auth/authWrapper.js";
 import { LoginPage } from "./Auth/Login.js";
 import { useAuth0 } from "@auth0/auth0-react";
 import { RequireRole } from "./Auth/roleRequirer.js";
+import { useApi } from "./Auth/API/useApi.js";
 
 function App() {
   return (
@@ -29,15 +30,17 @@ function App() {
 
 function Home() {
   const [tickets, setTickets] = useState([]);
+  const { callAPI } = useApi();
 
-  const getTickets = async () => {
+  const getTickets = useCallback(async () => {
     try {
-      const data = await fetchTickets();
+      console.log("trying to get tickets");
+      const data = await callAPI("http://localhost:8001/tickets", "get");
       setTickets(data);
     } catch (e) {
       console.log("Failed to load Tickets ", e);
     }
-  };
+  }, [callAPI]);
 
   useEffect(() => {
     getTickets();
@@ -47,9 +50,9 @@ function Home() {
       <div className="w-full max-w-5xl mx-auto px-4">
         <Header />
         <TicketInput getTickets={getTickets} />
-        <RequireRole role={"admin"}>
-          <TicketList tickets={tickets} />
-        </RequireRole>
+        {/* <RequireRole role={"admin"}> */}
+        <TicketList tickets={tickets} />
+        {/* </RequireRole> */}
       </div>
     </div>
   );

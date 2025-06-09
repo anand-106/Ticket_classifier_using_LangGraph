@@ -14,11 +14,12 @@ export function AuthWrapper({ children }) {
 
         console.log("Access Token:", token);
 
-        const response = await fetch("http://localhost:8001/admin", {
+        const response = await fetch("http://localhost:8001/protected", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
+        console.log(response);
 
         // Optional: handle response
         if (!response.ok) {

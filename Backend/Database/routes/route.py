@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter,Depends
 from Database.models.model import Ticket,Message,CloseTicket
 from Database.schema.schemas import list_serial,make_ticket,individual_serial
 from Database.config.database import collection_name
@@ -6,13 +6,14 @@ from ticket_agent import run_chatbot
 from bson import ObjectId
 from pydantic import ValidationError
 from fastapi import HTTPException
+from Auth.auth import check_role
 
 router = APIRouter()
 
 
 #getRequest
 @router.get("/tickets")
-async def get_tickets():
+async def get_tickets(payload=Depends(check_role(['admin','Developers']))):
     tickets = list_serial(collection_name.find())
     return tickets
 

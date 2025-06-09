@@ -5,7 +5,7 @@ from ticket_agent import run_chatbot
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from Database.routes.route import router
-from Auth.auth import check_role
+from Auth.auth import token_verify
 from fastapi import FastAPI, Depends
 
 app = FastAPI()
@@ -27,9 +27,9 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-@router.get("/admin")
-def admin_only_route(user=Depends(check_role("admin"))):
-    return {"message": "Welcome Admin!", "user": user}
+@router.get("/protected")
+def admin_only_route(user=Depends(token_verify)):
+    return {"message": "welcome you are Authenticated", "user": user}
 
 
 
