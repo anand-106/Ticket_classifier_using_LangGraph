@@ -6,6 +6,7 @@ import { TicketDetails } from "./ticketDetails.js";
 import { AuthWrapper } from "./Auth/authWrapper.js";
 import { LoginPage } from "./Auth/Login.js";
 import { useAuth0 } from "@auth0/auth0-react";
+import { RequireRole } from "./Auth/roleRequirer.js";
 
 function App() {
   return (
@@ -46,7 +47,9 @@ function Home() {
       <div className="w-full max-w-5xl mx-auto px-4">
         <Header />
         <TicketInput getTickets={getTickets} />
-        <TicketList tickets={tickets} />
+        <RequireRole role={"admin"}>
+          <TicketList tickets={tickets} />
+        </RequireRole>
       </div>
     </div>
   );
