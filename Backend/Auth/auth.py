@@ -2,11 +2,15 @@ from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import jwt
 import requests
+from dotenv import load_dotenv
+import os
 
-AUTH0_DOMAIN ="dev-f8kz2pjzghjougi3.us.auth0.com"
-API_AUDIENCE = "https://myapp.example.com/api"
-ALGORITHMS = ["RS256"]
-NAMESPACE = "https://myapp.local"
+load_dotenv()
+
+AUTH0_DOMAIN = os.getenv("AUTH0_DOMAIN")
+API_AUDIENCE = os.getenv('API_AUDIENCE')
+ALGORITHMS = [os.getenv('ALGORITHMS')]
+NAMESPACE = os.getenv('NAMESPACE')
 auth_scheme = HTTPBearer()
 
 
