@@ -16,8 +16,9 @@ export function RequireRole({ role, children }) {
         const decoded = jwtDecode(token);
         console.log(decoded);
         const roles = decoded[`${namespace}roles`] || [];
-        console.log(roles);
-        setHasRole(roles.includes(role));
+        const allowedRoles = Array.isArray(role) ? role : [role];
+        const matched = roles.some((r) => allowedRoles.includes(r));
+        setHasRole(matched);
       } catch (err) {
         console.error("Error checking roles:", err);
       }

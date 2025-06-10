@@ -8,6 +8,7 @@ import { LoginPage } from "./Auth/Login.js";
 import { useAuth0 } from "@auth0/auth0-react";
 import { RequireRole } from "./Auth/roleRequirer.js";
 import { useApi } from "./Auth/API/useApi.js";
+import { RoleRedirect } from "./Auth/roleBasedRedirect.js";
 
 function App() {
   return (
@@ -17,7 +18,23 @@ function App() {
           path="/"
           element={
             <AuthWrapper>
-              <Home />
+              <RoleRedirect />
+            </AuthWrapper>
+          }
+        />
+        <Route
+          path="/admin-home"
+          element={
+            <AuthWrapper>
+              <Home link={"http://localhost:8001/tickets"} />{" "}
+            </AuthWrapper>
+          }
+        />
+        <Route
+          path="/user-home"
+          element={
+            <AuthWrapper>
+              <Home link={"http://localhost:8001/my-tickets"} />{" "}
             </AuthWrapper>
           }
         />
@@ -28,14 +45,14 @@ function App() {
   );
 }
 
-function Home() {
+function Home({ link }) {
   const [tickets, setTickets] = useState([]);
   const { callAPI } = useApi();
 
   const getTickets = useCallback(async () => {
     try {
       console.log("trying to get tickets");
-      const data = await callAPI("http://localhost:8001/my-tickets", "get");
+      const data = await callAPI(link, "get");
       setTickets(data);
     } catch (e) {
       console.log("Failed to load Tickets ", e);
